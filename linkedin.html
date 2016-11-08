@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>LinkedIn Login</title>
+
+    <script type="text/javascript" src="//platform.linkedin.com/in.js">
+        api_key: 81pilo4ndric46
+        authorize: true
+        onLoad:  onLinkedInLoad
+    </script>
+
+    <script type="text/javascript">
+
+        function onLinkedInLoad() {
+            IN.Event.on(IN, "auth", onLinkedInAuth);
+        }
+
+        function onLinkedInAuth() {
+            IN.API.Profile("me").fields("id","first-name", "last-name", "email-address").result(displayProfiles);
+        }
+
+        // Handle the successful return from the API call
+        function onSuccess(data) {
+            console.log(data);
+        }
+
+        // Handle an error response from the API call
+        function onError(error) {
+            console.log(error);
+        }
+
+        function displayProfiles(profiles) {
+            member = profiles.values[0];
+            document.getElementById("profiles").innerHTML =
+                    "<p>"+member.id+"<br> " +  member.firstName + "<br> " + member.lastName + "<br>"+member.emailAddress+ "</p>";
+
+            console.log("::Authentication Token::")
+            console.dir(IN.ENV.auth.oauth_token);
+        }
+    </script>
+</head>
+<body>
+    <script type="in/Login">
+        Hello, <?js= firstName ?> <?js= lastName ?>.
+    </script>
+    <div id="profiles">
+    </div>
+</body>
+</html>
